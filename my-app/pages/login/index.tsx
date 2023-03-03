@@ -63,9 +63,12 @@ const LoginPage = (props: Props) => {
         .required("Yêu cầu buộc nhập trường này"),
       userName: yup
         .string()
-        .required("Yêu cầu buộc nhập trường này")
-        .matches(/^[A-Z a-z]+$/, "Trường này không được chứa kí tự số")
-        .min(3, "Nhập ít nhất 3 kí tự"),
+        .required("Yêu cầu buộc nhập trường này").trim()
+        .min(3, "Nhập ít nhất 3 kí tự")
+        .matches(
+          /^[A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ][a-zàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]*(?:[ ][A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ][a-zàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]*)*$/,
+          "Trường này không được chứa kí tự số"
+        ),
       password: yup
         .string()
         .required("Yêu cầu buộc nhập trường này")
@@ -83,8 +86,11 @@ const LoginPage = (props: Props) => {
       }),
 
       phone: yup.string().when("phone", (val: any, schema) => {
-        if (val.length > 0) {
-          return yup.string().min(10, "Nhập ít nhất 10 kí tự số").matches(/^-?\d+\.?\d*$/,"Không chứa kí tự chữ");
+        if (val?.toString().replace(/^\s+|\s+$/gm, "").length > 0) {
+          return yup
+            .string()
+            .min(5, "Nhập ít nhất 10 kí tự số")
+            .matches(/^-?\d+\.?\d*$/, "Không chứa kí tự chữ");
         } else {
           return yup.string().notRequired();
         }
