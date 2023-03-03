@@ -58,7 +58,7 @@ const LoginPage = (props: Props) => {
   const schema = yup.object().shape(
     {
       email: yup
-        .string()
+        .string().trim()
         .email("Trường này không phải Email")
         .required("Yêu cầu buộc nhập trường này"),
       userName: yup
@@ -70,11 +70,11 @@ const LoginPage = (props: Props) => {
           "Trường này không được chứa kí tự số"
         ),
       password: yup
-        .string()
+        .string().trim()
         .required("Yêu cầu buộc nhập trường này")
         .min(5, "Nhập ít nhất 5 kí tự"),
       passwordConfirmation: yup
-        .string()
+        .string().trim()
         .required("Mật khẩu không trùng khớp")
         .oneOf([yup.ref("password")], "Mật khẩu không trùng khớp"),
       birth: yup.string().when("birth", (val: any, schema) => {
@@ -85,7 +85,7 @@ const LoginPage = (props: Props) => {
         }
       }),
 
-      phone: yup.string().when("phone", (val: any, schema) => {
+      phone: yup.string().trim().when("phone", (val: any, schema) => {
         if (val?.toString().replace(/^\s+|\s+$/gm, "").length > 0) {
           return yup
             .string()
