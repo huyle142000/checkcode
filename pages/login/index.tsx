@@ -17,22 +17,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { toast } from "react-toastify";
-interface FormRegister {
-  userName: string;
-  birth: string;
-  phone: string;
-  email: string;
-  password: string;
-  passwordConfirmation: string;
-}
-let defaultValues: FormRegister = {
-  email: "",
-  password: "",
-  userName: "",
-  birth: "",
-  phone: "",
-  passwordConfirmation: "",
-};
+import Uselogin from "./UseLogin";
 
 export const StyledContainer = styled.div`
   display: grid;
@@ -49,81 +34,9 @@ export const StyledLoginContainer = styled.div`
   box-shadow: 0 0 0 2px #a9a8a83a;
 `;
 
-type Props = {};
-function formatDate(date: any) {
-  return new Date(date).toLocaleDateString();
-}
-const LoginPage = (props: Props) => {
+const LoginPage = () => {
   // VAlidateForm
-  const schema = yup.object().shape(
-    {
-      email: yup
-        .string().trim()
-        .email("Trường này không phải Email")
-        .required("Yêu cầu buộc nhập trường này"),
-      userName: yup
-        .string()
-        .required("Yêu cầu buộc nhập trường này").trim()
-        .min(3, "Nhập ít nhất 3 kí tự")
-        .matches(
-          /^[A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ][a-zàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]*(?:[ ][A-ZÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ][a-zàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]*)*$/,
-          "Trường này không được chứa kí tự số"
-        ),
-      password: yup
-        .string().trim()
-        .required("Yêu cầu buộc nhập trường này")
-        .min(5, "Nhập ít nhất 5 kí tự"),
-      passwordConfirmation: yup
-        .string().trim()
-        .required("Mật khẩu không trùng khớp")
-        .oneOf([yup.ref("password")], "Mật khẩu không trùng khớp"),
-      birth: yup.string().when("birth", (val: any, schema) => {
-        if (val?.toString().replace(/^\s+|\s+$/gm, "").length > 0) {
-          return yup.date().typeError("Không đúng định dạng Ngày tháng năm");
-        } else {
-          return yup.string().notRequired();
-        }
-      }),
-
-      phone: yup.string().trim().when("phone", (val: any, schema) => {
-        if (val?.toString().replace(/^\s+|\s+$/gm, "").length > 0) {
-          return yup
-            .string()
-            .min(5, "Nhập ít nhất 10 kí tự số")
-            .matches(/^-?\d+\.?\d*$/, "Không chứa kí tự chữ");
-        } else {
-          return yup.string().notRequired();
-        }
-      }),
-    },
-    [
-      ["birth", "birth"],
-      ["phone", "phone"],
-    ]
-  );
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormRegister>({
-    mode: "onBlur",
-    defaultValues,
-    resolver: yupResolver(schema),
-  });
-
-  const onSubmit = (data: FormRegister) => {
-    console.log(data, "data");
-    toast("🦄 Đăng kí thành công", {
-      position: "top-center",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
-  };
+  let { control, handleSubmit, errors, onSubmit } = Uselogin();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   return (
     <StyledContainer>
@@ -137,12 +50,12 @@ const LoginPage = (props: Props) => {
               render={({ field: { value, onChange, onBlur } }) => (
                 <TextField
                   autoFocus
-                  label="Họ và tên "
+                  label="Họ và tên"
                   value={value}
                   onBlur={onBlur}
                   onChange={onChange}
                   error={Boolean(errors.userName)}
-                  placeholder="Nhập Họ và Tên (Bắt buộc)"
+                  placeholder="Nhập Họ và Tên (Bắt buộc) vd: Lê Huy"
                 />
               )}
             />

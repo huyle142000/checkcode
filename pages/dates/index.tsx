@@ -6,9 +6,7 @@ import Stack from "@mui/material/Stack";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { Box, FormHelperText } from "@mui/material";
 import moment, { Moment } from "moment";
-type Props = {};
-
-const DatePages = (props: Props) => {
+const DatePages = () => {
   const [value, setValue] = React.useState<Moment | null>(moment("10-2-2000"));
 
   return (
