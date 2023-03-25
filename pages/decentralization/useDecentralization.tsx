@@ -134,7 +134,30 @@ const useDecentralization = () => {
   // Submit
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(arrPermission, "arrPermission");
+
+    let arrNew: any[] = [];
+    arrPermission.map((permission, index) => {
+      let subjectValid;
+      let arrAction: string[] = [];
+      permission.action.map((action: any, index) => {
+        let keyOfAction: any = Object.keys(action)[0];
+
+        if (action[keyOfAction]) {
+          subjectValid = permission.subject;
+          arrAction.push(keyOfAction);
+        }
+      });
+      if (arrAction.length != 0) {
+        arrNew.push({
+          action: arrAction,
+          subject: [subjectValid],
+        });
+      }
+    });
+    let object = {
+      permissionsRule: [...arrNew],
+    };
+    console.log(object, "arrNew");
   };
   //    HANLDE checkAll
   const handleCheckAll = (e: ChangeEvent<HTMLInputElement>) => {
